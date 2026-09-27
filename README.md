@@ -2,7 +2,12 @@
 
 [Русская версия](README.ru.md)
 
-CLI tool for managing port forwarding rules and UPnP on TP-Link Archer routers.
+pf-tool is a command-line tool for managing port forwarding rules and UPnP
+on TP-Link Archer routers. Tested on Archer AX10 v1.0 (AX1500). It talks
+directly to the router's internal API and lets you bulk enable, disable or
+toggle port forwarding rules by name prefix — no more clicking through the
+web UI one rule at a time. UPnP can be controlled and its active mappings
+listed from the same CLI.
 
 Two forms:
 - Python script (Python 3.9+)
