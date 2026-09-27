@@ -1,4 +1,4 @@
-# tplink-pf-manager
+# tplink-archer-ax10-port-forwarding-cli
 
 [Русская версия](README.ru.md)
 
