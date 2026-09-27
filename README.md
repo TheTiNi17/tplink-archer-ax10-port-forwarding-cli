@@ -1,4 +1,5 @@
 # tplink-archer-ax10-port-forwarding-cli
+*Bulk port forwarding and UPnP control for TP-Link Archer AX10 / AX1500 from the command line.*
 
 [Русская версия](README.ru.md)
 
