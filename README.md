@@ -49,7 +49,7 @@ ROUTER_USERNAME=admin
 ROUTER_PASSWORD=your_router_password
 
 3. Run:
-pf-tool.exe portrules status
+pf-tool.exe portrules status (example)
 
 ### Option 2 — Python script
 
