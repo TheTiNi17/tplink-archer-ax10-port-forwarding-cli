@@ -1,0 +1,2732 @@
+[
+  {
+    "module": "administration",
+    "endpoints": [
+      {
+        "path": "/admin/administration?form=account",
+        "admin_module": "administration",
+        "form": "account",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read and change the router admin login account/password",
+        "read_safe": false,
+        "notable_fields": [
+          "old_acc",
+          "old_pwd",
+          "new_acc",
+          "new_pwd",
+          "cfm_pwd"
+        ]
+      },
+      {
+        "path": "/admin/administration?form=recovery",
+        "admin_module": "administration",
+        "form": "recovery",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Configure password recovery via email (SMTP) settings",
+        "read_safe": false,
+        "notable_fields": [
+          "enable_rec",
+          "from",
+          "to",
+          "smtp",
+          "enable_auth",
+          "username",
+          "password"
+        ]
+      },
+      {
+        "path": "/admin/administration?form=mode",
+        "admin_module": "administration",
+        "form": "mode",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Get/set local management access mode (all devices vs specified)",
+        "read_safe": false,
+        "notable_fields": [
+          "mode"
+        ]
+      },
+      {
+        "path": "/admin/administration?form=https",
+        "admin_module": "administration",
+        "form": "https",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Enable/disable HTTPS for local web management",
+        "read_safe": false,
+        "notable_fields": [
+          "https_enable"
+        ]
+      },
+      {
+        "path": "/admin/administration?form=remote",
+        "admin_module": "administration",
+        "form": "remote",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Configure remote (WAN) web management enable/port/allowed managers",
+        "read_safe": false,
+        "notable_fields": [
+          "enable",
+          "https_port",
+          "web_address",
+          "managers",
+          "ipaddr"
+        ]
+      },
+      {
+        "path": "/admin/administration?form=local",
+        "admin_module": "administration",
+        "form": "local",
+        "operations": [
+          "read",
+          "write",
+          "add",
+          "remove"
+        ],
+        "purpose": "Manage the list of devices allowed for local management (allow-device grid store)",
+        "read_safe": false,
+        "notable_fields": [
+          "description",
+          "mac",
+          "host",
+          "enable"
+        ]
+      },
+      {
+        "path": "/admin/administration?form=check_factory_default",
+        "admin_module": "administration",
+        "form": "check_factory_default",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Check whether the device is at factory default / whether cloud account ever logged in",
+        "read_safe": true,
+        "notable_fields": [
+          "is_default",
+          "cloud_ever_login"
+        ]
+      },
+      {
+        "path": "/admin/nat?form=vs",
+        "admin_module": "nat",
+        "form": "vs",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read virtual server / port-forwarding entries (used to detect port conflicts with remote mgmt)",
+        "read_safe": true,
+        "notable_fields": [
+          "internal_port",
+          "external_port",
+          "ipaddr",
+          "enable",
+          "protocol",
+          "name"
+        ]
+      }
+    ]
+  },
+  {
+    "module": "ddnsAdv",
+    "endpoints": [
+      {
+        "path": "/admin/ddns?form=provider",
+        "admin_module": "ddns",
+        "form": "provider",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read and set the active DDNS service provider (TP-Link / No-IP / DynDNS) and DDNS enable state.",
+        "read_safe": false,
+        "notable_fields": [
+          "provider",
+          "enable",
+          "available",
+          "registerUrl",
+          "operation"
+        ]
+      },
+      {
+        "path": "/admin/ddns?form=tplink",
+        "admin_module": "ddns",
+        "form": "tplink",
+        "operations": [
+          "load",
+          "read",
+          "insert",
+          "remove",
+          "bind",
+          "unbind"
+        ],
+        "purpose": "Manage TP-Link cloud DDNS domains: list registered domains/status, register (insert) a domain, remove a domain, and bind/unbind a domain to this device.",
+        "read_safe": false,
+        "notable_fields": [
+          "domain",
+          "time",
+          "status",
+          "current_domain",
+          "operation"
+        ]
+      },
+      {
+        "path": "/admin/ddns?form=dyndns",
+        "admin_module": "ddns",
+        "form": "dyndns",
+        "operations": [
+          "read",
+          "login",
+          "logout",
+          "refresh"
+        ],
+        "purpose": "Configure and control the DynDNS provider session: read status, login with credentials, logout, and refresh the DDNS update.",
+        "read_safe": false,
+        "notable_fields": [
+          "username",
+          "password",
+          "domain",
+          "wan_bind",
+          "status",
+          "operation"
+        ]
+      },
+      {
+        "path": "/admin/ddns?form=noip",
+        "admin_module": "ddns",
+        "form": "noip",
+        "operations": [
+          "read",
+          "login",
+          "logout",
+          "refresh"
+        ],
+        "purpose": "Configure and control the No-IP provider session: read status, login with credentials, logout, and refresh the DDNS update.",
+        "read_safe": false,
+        "notable_fields": [
+          "username",
+          "password",
+          "domain",
+          "wan_bind",
+          "status",
+          "operation"
+        ]
+      },
+      {
+        "path": "/admin/cloud_account?form=check_internet",
+        "admin_module": "cloud_account",
+        "form": "check_internet",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Check whether the router has internet connectivity to the TP-Link cloud before performing DDNS domain operations.",
+        "read_safe": true,
+        "notable_fields": [
+          "success",
+          "operation"
+        ]
+      }
+    ]
+  },
+  {
+    "module": "dhcpServerAdv",
+    "endpoints": [
+      {
+        "path": "/admin/dhcps?form=setting",
+        "admin_module": "dhcps",
+        "form": "setting",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read and configure the LAN DHCP server (enable, address pool range, lease time, gateway, DNS).",
+        "read_safe": false,
+        "notable_fields": [
+          "enable",
+          "ipaddr_start",
+          "ipaddr_end",
+          "leasetime",
+          "gateway",
+          "pri_dns",
+          "snd_dns"
+        ]
+      },
+      {
+        "path": "/admin/dhcps?form=reservation",
+        "admin_module": "dhcps",
+        "form": "reservation",
+        "operations": [
+          "read",
+          "load",
+          "add",
+          "write",
+          "set",
+          "remove"
+        ],
+        "purpose": "Manage DHCP address reservation entries (list, add, edit, toggle enable, delete MAC-to-IP bindings).",
+        "read_safe": false,
+        "notable_fields": [
+          "key",
+          "mac",
+          "ip",
+          "enable",
+          "hostname",
+          "name"
+        ]
+      },
+      {
+        "path": "/admin/dhcps?form=client",
+        "admin_module": "dhcps",
+        "form": "client",
+        "operations": [
+          "read",
+          "load"
+        ],
+        "purpose": "Read the list of currently connected/leased DHCP clients.",
+        "read_safe": true,
+        "notable_fields": [
+          "key",
+          "name",
+          "macaddr",
+          "ipaddr",
+          "leasetime"
+        ]
+      }
+    ]
+  },
+  {
+    "module": "diagnostics",
+    "endpoints": [
+      {
+        "path": "/admin/diag?form=diag",
+        "admin_module": "diag",
+        "form": "diag",
+        "operations": [
+          "start",
+          "continue",
+          "stop"
+        ],
+        "purpose": "Run network diagnostics (ping / traceroute / nslookup) against a target host and poll for streaming results.",
+        "read_safe": false,
+        "notable_fields": [
+          "type",
+          "ipaddr",
+          "ipaddr_ping",
+          "ipaddr_trace",
+          "count",
+          "pktsize",
+          "ttl",
+          "operation",
+          "result",
+          "finish"
+        ]
+      },
+      {
+        "path": "/admin/diag?form=port_mirror",
+        "admin_module": "diag",
+        "form": "port_mirror",
+        "operations": [
+          "load",
+          "write"
+        ],
+        "purpose": "Read and configure LAN/WAN port mirroring: enable flag, the mirroring (destination) port, and the set of source ports to reflect from.",
+        "read_safe": false,
+        "notable_fields": [
+          "enable",
+          "mirroring_port",
+          "from",
+          "lan1",
+          "lan2",
+          "wan"
+        ]
+      }
+    ]
+  },
+  {
+    "module": "dmz",
+    "endpoints": [
+      {
+        "path": "/admin/nat?form=dmz",
+        "admin_module": "nat",
+        "form": "dmz",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read and configure the DMZ host (enable flag and the LAN IP address exposed to the internet).",
+        "read_safe": false,
+        "notable_fields": [
+          "enable",
+          "ipaddr",
+          "operation"
+        ]
+      },
+      {
+        "path": "/admin/nat?form=setting",
+        "admin_module": "nat",
+        "form": "setting",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read NAT global setting to check whether NAT is enabled (gates the DMZ feature UI).",
+        "read_safe": true,
+        "notable_fields": [
+          "enable",
+          "operation"
+        ]
+      }
+    ]
+  },
+  {
+    "module": "firmware",
+    "endpoints": [
+      {
+        "path": "/admin/firmware?form=upgrade",
+        "admin_module": "firmware",
+        "form": "upgrade",
+        "operations": [
+          "read",
+          "fwup_check"
+        ],
+        "purpose": "Read current firmware/hardware version and model (operation read); query firmware upgrade progress percent (fwup_check).",
+        "read_safe": true,
+        "notable_fields": [
+          "firmware_version",
+          "hardware_version",
+          "model",
+          "percent",
+          "errorcode",
+          "upgradetime"
+        ]
+      },
+      {
+        "path": "/admin/firmware?form=save_upgrade",
+        "admin_module": "firmware",
+        "form": "save_upgrade",
+        "operations": [
+          "firmware"
+        ],
+        "purpose": "Upload a local .bin firmware file to flash the router (manual upgrade)",
+        "read_safe": false,
+        "notable_fields": [
+          "operation",
+          "keep",
+          "fileId(manual-upgrade-file)"
+        ]
+      },
+      {
+        "path": "/admin/firmware?form=auto_upgrade",
+        "admin_module": "firmware",
+        "form": "auto_upgrade",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read and configure automatic firmware auto-update enable state and schedule time (autoUpgradeModel load/submit)",
+        "read_safe": false,
+        "notable_fields": [
+          "enable",
+          "time"
+        ]
+      },
+      {
+        "path": "/admin/firmware?form=slave_cmd",
+        "admin_module": "firmware",
+        "form": "slave_cmd",
+        "operations": [
+          "slave_get_info",
+          "slave_upgrade_firmware",
+          "slave_get_upgrade_info"
+        ],
+        "purpose": "List mesh/OneMesh satellite devices and trigger/monitor their firmware upgrade",
+        "read_safe": false,
+        "notable_fields": [
+          "ip",
+          "mac",
+          "name",
+          "model",
+          "version",
+          "is_latest",
+          "latest_version",
+          "releaseNote",
+          "status",
+          "time"
+        ]
+      },
+      {
+        "path": "/admin/cloud_account?form=cloud_upgrade",
+        "admin_module": "cloud_account",
+        "form": "cloud_upgrade",
+        "operations": [
+          "load",
+          "upgrade"
+        ],
+        "purpose": "Load latest online firmware info from cloud and trigger the online cloud firmware upgrade/download (onlineUpgradeProxy)",
+        "read_safe": false,
+        "notable_fields": [
+          "latest_version",
+          "latest_flag",
+          "detail"
+        ]
+      },
+      {
+        "path": "/admin/cloud_account?form=check_upgrade",
+        "admin_module": "cloud_account",
+        "form": "check_upgrade",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Check cloud for available upgrade number/availability (checkUpgradeNumberProxy)",
+        "read_safe": true,
+        "notable_fields": [
+          "operation"
+        ]
+      },
+      {
+        "path": "/admin/cloud_account?form=check_device",
+        "admin_module": "cloud_account",
+        "form": "check_device",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Verify the device is registered/recognized by the cloud before upgrade (checkDeviceProxy / detectDevice)",
+        "read_safe": true,
+        "notable_fields": [
+          "operation"
+        ]
+      },
+      {
+        "path": "/admin/cloud_account?form=check_connection",
+        "admin_module": "cloud_account",
+        "form": "check_connection",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Check cloud account/server connection status (checkCloudConnectionProxy)",
+        "read_safe": true,
+        "notable_fields": [
+          "operation"
+        ]
+      },
+      {
+        "path": "/admin/cloud_account?form=detect_upgrade_status",
+        "admin_module": "cloud_account",
+        "form": "detect_upgrade_status",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Poll firmware download progress percent during online cloud upgrade (checkDownloadStatusProxy)",
+        "read_safe": true,
+        "notable_fields": [
+          "percent",
+          "errorCode"
+        ]
+      },
+      {
+        "path": "/admin/quick_setup?form=quick_setup",
+        "admin_module": "quick_setup",
+        "form": "quick_setup",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read WAN wire connection type (wired/wireless) used to decide reconnect flow (checkWireTypeProxy)",
+        "read_safe": true,
+        "notable_fields": [
+          "wire_type"
+        ]
+      }
+    ]
+  },
+  {
+    "module": "guestNetwork",
+    "endpoints": [
+      {
+        "path": "/admin/wireless?form=guest_2g",
+        "admin_module": "wireless",
+        "form": "guest_2g",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read/write the guest network SSID, encryption, PSK, portal auth and redirect settings (2.4G band, part of the combined guest model proxy).",
+        "read_safe": false,
+        "notable_fields": [
+          "guest_2g_enable",
+          "guest_2g_ssid",
+          "guest_2g_hidden",
+          "guest_2g_encryption",
+          "guest_2g_psk_version",
+          "guest_2g_psk_key"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=guest_5g",
+        "admin_module": "wireless",
+        "form": "guest_5g",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read/write guest network SSID/encryption/PSK settings for the 5G band (part of the combined guest model proxy).",
+        "read_safe": false,
+        "notable_fields": [
+          "guest_5g_enable",
+          "guest_5g_ssid",
+          "guest_5g_hidden",
+          "guest_5g_encryption",
+          "guest_5g_psk_version",
+          "guest_5g_psk_key"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=guest_5g_2",
+        "admin_module": "wireless",
+        "form": "guest_5g_2",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read/write guest network SSID/encryption/PSK settings for the second 5G band on tri-band devices (part of combined guest proxy).",
+        "read_safe": false,
+        "notable_fields": [
+          "guest_5g_2_enable",
+          "guest_5g_2_ssid",
+          "guest_5g_2_hidden",
+          "guest_5g_2_encryption",
+          "guest_5g_2_psk_version",
+          "guest_5g_2_psk_key"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=guest_2g5g",
+        "admin_module": "wireless",
+        "form": "guest_2g5g",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Unified guest network config (SSID/encryption/PSK/portal) applied across all bands; the primary form the guestNetwork model reads and submits.",
+        "read_safe": false,
+        "notable_fields": [
+          "guest_2g5g_encryption",
+          "guest_2g5g_psk_version",
+          "guest_2g5g_psk_key",
+          "guest_2g5g_authentication_type",
+          "guest_2g5g_portal_password",
+          "guest_2g5g_authentication_timeout",
+          "guest_2g5g_redirect",
+          "guest_2g5g_redirect_url",
+          "guest_6g_enable",
+          "guest_6g_ssid"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=guest",
+        "admin_module": "wireless",
+        "form": "guest",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read/write guest network permission flags: client isolation and access to local network.",
+        "read_safe": false,
+        "notable_fields": [
+          "isolate",
+          "access",
+          "access_local"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=portal_content",
+        "admin_module": "wireless",
+        "form": "portal_content",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read/write the captive portal login page content (welcome title, terms text, font/theme colors and opacity).",
+        "read_safe": false,
+        "notable_fields": [
+          "title",
+          "content",
+          "font_color",
+          "theme_color",
+          "font_opacity",
+          "theme_opacity"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=guestnetwork_bandwidth_ctrl",
+        "admin_module": "wireless",
+        "form": "guestnetwork_bandwidth_ctrl",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read/write per-band guest network upload/download bandwidth limits.",
+        "read_safe": false,
+        "notable_fields": [
+          "enable_2g",
+          "up_band_2g",
+          "down_band_2g",
+          "enable_5g1",
+          "up_band_5g1",
+          "down_band_5g1",
+          "enable_5g2",
+          "enable_6g",
+          "up_band_6g"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=guestnetwork_effectivetime_ctrl",
+        "admin_module": "wireless",
+        "form": "guestnetwork_effectivetime_ctrl",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read/write the guest network access effective-time limit (none/4h/1day/custom) and report remaining time.",
+        "read_safe": false,
+        "notable_fields": [
+          "type",
+          "effective_time",
+          "remain_time",
+          "int_time",
+          "day",
+          "hour",
+          "min"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=wireless_2g",
+        "admin_module": "wireless",
+        "form": "wireless_2g",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read the 2.4G host wireless enable/disabled status (used to gate whether the 2.4G guest toggle is available).",
+        "read_safe": true,
+        "notable_fields": [
+          "enable",
+          "disabled",
+          "disabled_all",
+          "disabled_by",
+          "extinfo.wds_guest_compatible"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=wireless_5g",
+        "admin_module": "wireless",
+        "form": "wireless_5g",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read the 5G host wireless enable/disabled status to gate the 5G guest toggle.",
+        "read_safe": true,
+        "notable_fields": [
+          "enable",
+          "disabled",
+          "disabled_all",
+          "disabled_by",
+          "extinfo.wds_guest_compatible"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=wireless_5g_2",
+        "admin_module": "wireless",
+        "form": "wireless_5g_2",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read the second 5G host wireless enable/disabled status (tri-band) to gate that guest toggle.",
+        "read_safe": true,
+        "notable_fields": [
+          "enable",
+          "disabled",
+          "disabled_all",
+          "disabled_by",
+          "extinfo.wds_guest_compatible"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=wireless_6g",
+        "admin_module": "wireless",
+        "form": "wireless_6g",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read the 6G host wireless enable/disabled status to gate the 6G guest toggle.",
+        "read_safe": true,
+        "notable_fields": [
+          "enable",
+          "disabled",
+          "disabled_all",
+          "disabled_by",
+          "extinfo.wds_guest_compatible"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=syspara_2g",
+        "admin_module": "wireless",
+        "form": "syspara_2g",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read 2.4G system parameters (WDS enable) to detect a WDS conflict that blocks the guest network.",
+        "read_safe": true,
+        "notable_fields": [
+          "enable"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=syspara_5g",
+        "admin_module": "wireless",
+        "form": "syspara_5g",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read 5G system parameters (WDS enable) to detect a WDS conflict blocking the guest network.",
+        "read_safe": true,
+        "notable_fields": [
+          "enable"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=syspara_5g_2",
+        "admin_module": "wireless",
+        "form": "syspara_5g_2",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read second-5G system parameters (WDS enable) to detect a WDS conflict blocking the guest network.",
+        "read_safe": true,
+        "notable_fields": [
+          "enable"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=syspara_6g",
+        "admin_module": "wireless",
+        "form": "syspara_6g",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read 6G system parameters (WDS enable) to detect a WDS conflict blocking the guest network.",
+        "read_safe": true,
+        "notable_fields": [
+          "enable"
+        ]
+      },
+      {
+        "path": "/admin/wifidog?form=portal_logo",
+        "admin_module": "wifidog",
+        "form": "portal_logo",
+        "operations": [
+          "read",
+          "upload"
+        ],
+        "purpose": "Read the current captive-portal logo image path and upload a new logo image.",
+        "read_safe": false,
+        "notable_fields": [
+          "logo",
+          "operation",
+          "data.imglogopath"
+        ]
+      },
+      {
+        "path": "/admin/wifidog?form=portal_background",
+        "admin_module": "wifidog",
+        "form": "portal_background",
+        "operations": [
+          "read",
+          "upload"
+        ],
+        "purpose": "Read the current captive-portal background image path and upload a new background image.",
+        "read_safe": false,
+        "notable_fields": [
+          "background",
+          "operation",
+          "data.imgbgrpath"
+        ]
+      },
+      {
+        "path": "/admin/folder_sharing?form=guest",
+        "admin_module": "folder_sharing",
+        "form": "guest",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Proxy for guest folder/media sharing config, kept in sync with the guest network SSID/security settings.",
+        "read_safe": false,
+        "notable_fields": [
+          "ssid",
+          "password",
+          "security"
+        ]
+      }
+    ]
+  },
+  {
+    "module": "internetAdv (Internet / WAN connection configuration)",
+    "endpoints": [
+      {
+        "path": "/admin/network?form=wan_ipv4_protos",
+        "admin_module": "network",
+        "form": "wan_ipv4_protos",
+        "operations": [
+          "read"
+        ],
+        "purpose": "List the WAN IPv4 connection protocols supported by the device (dynamic, static, pppoe, l2tp, pptp, bigpond, dslite, v6plus, ocn).",
+        "read_safe": true,
+        "notable_fields": [
+          "proto",
+          "name"
+        ]
+      },
+      {
+        "path": "/admin/network?form=wan_ipv4_status",
+        "admin_module": "network",
+        "form": "wan_ipv4_status",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read current WAN IPv4 status: whether the connection is enabled, the active conntype, and autodetect flag.",
+        "read_safe": true,
+        "notable_fields": [
+          "enable",
+          "conntype",
+          "autodetect",
+          "advanced"
+        ]
+      },
+      {
+        "path": "/admin/network?form=status_ipv4",
+        "admin_module": "network",
+        "form": "status_ipv4",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read LAN/WAN IPv4 address summary (LAN IP/mask, WAN IP/mask, WAN MAC).",
+        "read_safe": true,
+        "notable_fields": [
+          "lan_ipv4_ipaddr",
+          "lan_ipv4_netmask",
+          "wan_ipv4_ipaddr",
+          "wan_ipv4_netmask",
+          "wan_macaddr"
+        ]
+      },
+      {
+        "path": "/admin/network?form=wan_ipv4_dynamic",
+        "admin_module": "network",
+        "form": "wan_ipv4_dynamic",
+        "operations": [
+          "read",
+          "write",
+          "renew",
+          "release"
+        ],
+        "purpose": "Configure/read Dynamic IP (DHCP) WAN; also renew or release the DHCP lease.",
+        "read_safe": false,
+        "notable_fields": [
+          "ipaddr",
+          "netmask",
+          "gateway",
+          "pri_dns",
+          "snd_dns",
+          "mtu",
+          "hostname",
+          "unicast",
+          "manual_pridns",
+          "manual_snddns",
+          "conn_status",
+          "operation",
+          "share"
+        ]
+      },
+      {
+        "path": "/admin/network?form=wan_ipv4_staticip",
+        "admin_module": "network",
+        "form": "wan_ipv4_staticip",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Configure/read Static IP WAN connection settings.",
+        "read_safe": false,
+        "notable_fields": [
+          "ipaddr",
+          "netmask",
+          "gateway",
+          "pri_dns",
+          "snd_dns",
+          "mtu",
+          "conn_status"
+        ]
+      },
+      {
+        "path": "/admin/network?form=wan_ipv4_pppoe",
+        "admin_module": "network",
+        "form": "wan_ipv4_pppoe",
+        "operations": [
+          "read",
+          "write",
+          "connect",
+          "disconnect",
+          "renew",
+          "release"
+        ],
+        "purpose": "Configure/read PPPoE WAN; also dial connect/disconnect and renew/release the secondary connection.",
+        "read_safe": false,
+        "notable_fields": [
+          "username",
+          "password",
+          "conn_mode",
+          "demand_idle",
+          "manual_idle",
+          "time_start",
+          "time_end",
+          "conn_status",
+          "secondary_conn_type",
+          "operation"
+        ]
+      },
+      {
+        "path": "/admin/network?form=wan_retrieve_ipv4_pppoe",
+        "admin_module": "network",
+        "form": "wan_retrieve_ipv4_pppoe",
+        "operations": [
+          "write"
+        ],
+        "purpose": "Control PPPoE credential auto-retrieval; the 'stop' api sends operation:write with disabled:true to stop retrieval.",
+        "read_safe": false,
+        "notable_fields": [
+          "operation",
+          "disabled"
+        ]
+      },
+      {
+        "path": "/admin/network?form=wan_ipv4_l2tp",
+        "admin_module": "network",
+        "form": "wan_ipv4_l2tp",
+        "operations": [
+          "read",
+          "write",
+          "connect",
+          "disconnect"
+        ],
+        "purpose": "Configure/read L2TP VPN WAN; also dial connect and disconnect.",
+        "read_safe": false,
+        "notable_fields": [
+          "username",
+          "password",
+          "server_ip",
+          "ip_type",
+          "conn_mode",
+          "demand_idle",
+          "manual_idle",
+          "conn_status",
+          "inet_ip",
+          "dyn_ip",
+          "operation",
+          "share"
+        ]
+      },
+      {
+        "path": "/admin/network?form=wan_ipv4_pptp",
+        "admin_module": "network",
+        "form": "wan_ipv4_pptp",
+        "operations": [
+          "read",
+          "write",
+          "connect",
+          "disconnect"
+        ],
+        "purpose": "Configure/read PPTP VPN WAN; also dial connect and disconnect.",
+        "read_safe": false,
+        "notable_fields": [
+          "username",
+          "password",
+          "server_ip",
+          "ip_type",
+          "conn_mode",
+          "demand_idle",
+          "manual_idle",
+          "conn_status",
+          "inet_ip",
+          "dyn_ip",
+          "operation",
+          "share"
+        ]
+      },
+      {
+        "path": "/admin/network?form=wan_ipv4_bigpond",
+        "admin_module": "network",
+        "form": "wan_ipv4_bigpond",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Configure/read BigPond (Telstra Cable) WAN connection settings.",
+        "read_safe": false,
+        "notable_fields": [
+          "username",
+          "password",
+          "auth_server",
+          "mtu",
+          "conn_mode",
+          "demand_idle",
+          "manual_idle",
+          "conn_status",
+          "operation",
+          "share"
+        ]
+      },
+      {
+        "path": "/admin/network?form=wan_ipv4_dslite",
+        "admin_module": "network",
+        "form": "wan_ipv4_dslite",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Configure/read DS-Lite WAN (AFTR address, dynamic vs manual mode).",
+        "read_safe": false,
+        "notable_fields": [
+          "is_support_dynamic_mode",
+          "dynamic_mode",
+          "AFTR_name",
+          "conntype"
+        ]
+      },
+      {
+        "path": "/admin/network?form=wan_ipv4_v6plus",
+        "admin_module": "network",
+        "form": "wan_ipv4_v6plus",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Configure/read v6plus (IPv4-over-IPv6) WAN connection.",
+        "read_safe": false,
+        "notable_fields": [
+          "conntype"
+        ]
+      },
+      {
+        "path": "/admin/network?form=wan_ipv4_ocn",
+        "admin_module": "network",
+        "form": "wan_ipv4_ocn",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Configure/read OCN Virtual Connect (Japan) WAN connection.",
+        "read_safe": false,
+        "notable_fields": [
+          "conntype"
+        ]
+      },
+      {
+        "path": "/admin/network?form=mac_clone_advanced",
+        "admin_module": "network",
+        "form": "mac_clone_advanced",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Configure/read WAN MAC clone (default MAC, custom MAC, or use current computer's MAC).",
+        "read_safe": false,
+        "notable_fields": [
+          "mac_clone_type",
+          "mac_default",
+          "mac_custom",
+          "mac_computer"
+        ]
+      },
+      {
+        "path": "/admin/nat?form=setting",
+        "admin_module": "nat",
+        "form": "setting",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read/toggle NAT and hardware NAT boost (turbo) on the WAN.",
+        "read_safe": false,
+        "notable_fields": [
+          "enable",
+          "boost_enable"
+        ]
+      },
+      {
+        "path": "/admin/network?form=port_speed_current",
+        "admin_module": "network",
+        "form": "port_speed_current",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read/set the current WAN port link speed / duplex negotiation.",
+        "read_safe": false,
+        "notable_fields": [
+          "speed"
+        ]
+      },
+      {
+        "path": "/admin/network?form=port_speed_supported",
+        "admin_module": "network",
+        "form": "port_speed_supported",
+        "operations": [
+          "read"
+        ],
+        "purpose": "List the WAN port speed/duplex options supported by the device.",
+        "read_safe": true,
+        "notable_fields": [
+          "supported"
+        ]
+      },
+      {
+        "path": "/admin/network?form=wan_port_status",
+        "admin_module": "network",
+        "form": "wan_port_status",
+        "operations": [
+          "read",
+          "detect"
+        ],
+        "purpose": "Read the configured WAN port and detect/probe physical link state on a selected port.",
+        "read_safe": false,
+        "notable_fields": [
+          "wan_port_status",
+          "port",
+          "port_state",
+          "operation"
+        ]
+      }
+    ]
+  },
+  {
+    "module": "ipv6",
+    "endpoints": [
+      {
+        "path": "/admin/network?form=wan_ipv6_status",
+        "admin_module": "network",
+        "form": "wan_ipv6_status",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read current IPv6 internet/WAN connection status (enable state and connection type)",
+        "read_safe": true,
+        "notable_fields": [
+          "enable",
+          "conntype"
+        ]
+      },
+      {
+        "path": "/admin/network?form=lan_ipv6",
+        "admin_module": "network",
+        "form": "lan_ipv6",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read/configure LAN-side IPv6 settings (address assignment type, DHCPv6/SLAAC/RDNSS prefixes, release time)",
+        "read_safe": false,
+        "notable_fields": [
+          "assign_type",
+          "dhcp_prefix",
+          "slaac_prefix",
+          "rdnss_prefix",
+          "release_time",
+          "address"
+        ]
+      },
+      {
+        "path": "/admin/network?form=wan_ipv6_dynamic",
+        "admin_module": "network",
+        "form": "wan_ipv6_dynamic",
+        "operations": [
+          "read",
+          "write",
+          "renew",
+          "release"
+        ],
+        "purpose": "Configure dynamic (DHCPv6/auto) IPv6 WAN connection and renew/release the lease",
+        "read_safe": false,
+        "notable_fields": [
+          "conntype",
+          "ip6addr",
+          "prefix",
+          "pri_dns",
+          "snd_dns",
+          "ip_mode",
+          "dns_mode",
+          "conn_status"
+        ]
+      },
+      {
+        "path": "/admin/network?form=wan_ipv6_static",
+        "admin_module": "network",
+        "form": "wan_ipv6_static",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Configure static IPv6 WAN connection (address, gateway, DNS, MTU)",
+        "read_safe": false,
+        "notable_fields": [
+          "conntype",
+          "ip6addr",
+          "ip6gw",
+          "pri_dns",
+          "snd_dns",
+          "mtu"
+        ]
+      },
+      {
+        "path": "/admin/network?form=wan_ipv6_pppoe",
+        "admin_module": "network",
+        "form": "wan_ipv6_pppoe",
+        "operations": [
+          "read",
+          "write",
+          "connect",
+          "disconnect"
+        ],
+        "purpose": "Configure PPPoE IPv6 WAN connection and connect/disconnect the session",
+        "read_safe": false,
+        "notable_fields": [
+          "conntype",
+          "username",
+          "password",
+          "dns_mode",
+          "ip_mode",
+          "pppshare",
+          "conn_status"
+        ]
+      },
+      {
+        "path": "/admin/network?form=wan_ipv6_tunnel",
+        "admin_module": "network",
+        "form": "wan_ipv6_tunnel",
+        "operations": [
+          "read",
+          "write",
+          "connect",
+          "disconnect"
+        ],
+        "purpose": "Configure 6to4 tunnel IPv6 WAN connection and connect/disconnect",
+        "read_safe": false,
+        "notable_fields": [
+          "conntype",
+          "ipaddr",
+          "netmask",
+          "gateway",
+          "tunnel_addr",
+          "dns_mode",
+          "pri_dns",
+          "snd_dns"
+        ]
+      },
+      {
+        "path": "/admin/network?form=wan_ipv6_6rd",
+        "admin_module": "network",
+        "form": "wan_ipv6_6rd",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Configure 6rd IPv6 WAN connection (IPv4 mask length, 6rd prefix/prefix length, relay IPv4)",
+        "read_safe": false,
+        "notable_fields": [
+          "conntype",
+          "ip_mode",
+          "ipv4_mask_len",
+          "6rd_prefix",
+          "6rd_prefix_len",
+          "relay_ipv4_addr"
+        ]
+      },
+      {
+        "path": "/admin/network?form=wan_ipv6_dslite",
+        "admin_module": "network",
+        "form": "wan_ipv6_dslite",
+        "operations": [
+          "read",
+          "write",
+          "renew",
+          "release",
+          "connect",
+          "disconnect"
+        ],
+        "purpose": "Configure DS-Lite IPv6 WAN connection (dynamic/static/pppoe secondary conn) and renew/release/connect/disconnect",
+        "read_safe": false,
+        "notable_fields": [
+          "conntype",
+          "snd_conn",
+          "dynamic_ip6addr",
+          "static_ip6addr",
+          "pppoe_username",
+          "pppoe_password",
+          "AFTR_name"
+        ]
+      },
+      {
+        "path": "/admin/network?form=wan_ipv6_pass",
+        "admin_module": "network",
+        "form": "wan_ipv6_pass",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Configure IPv6 pass-through / bridge mode connection",
+        "read_safe": false,
+        "notable_fields": [
+          "conntype",
+          "type"
+        ]
+      },
+      {
+        "path": "/admin/network?form=wan_ipv6_protos",
+        "admin_module": "network",
+        "form": "wan_ipv6_protos",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read list of supported IPv6 WAN connection protocol types (name/value options)",
+        "read_safe": true,
+        "notable_fields": [
+          "name",
+          "value"
+        ]
+      },
+      {
+        "path": "/admin/network?form=mac_clone_advanced",
+        "admin_module": "network",
+        "form": "mac_clone_advanced",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read/configure MAC address clone for the IPv6 WAN connection",
+        "read_safe": false,
+        "notable_fields": [
+          "mac_clone_type",
+          "mac_default",
+          "mac_computer",
+          "mac_custom"
+        ]
+      },
+      {
+        "path": "/admin/nat?form=fr6",
+        "admin_module": "nat",
+        "form": "fr6",
+        "operations": [
+          "read",
+          "add",
+          "remove",
+          "write"
+        ],
+        "purpose": "Manage IPv6 firewall rules / port forwarding (fr6) entries",
+        "read_safe": false,
+        "notable_fields": [
+          "type",
+          "name",
+          "port",
+          "protocol",
+          "enable",
+          "ip"
+        ]
+      },
+      {
+        "path": "/admin/nat?form=client_list_v6",
+        "admin_module": "nat",
+        "form": "client_list_v6",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read list of IPv6 LAN clients (for firewall rule target selection)",
+        "read_safe": true,
+        "notable_fields": [
+          "type",
+          "name",
+          "mac",
+          "ip"
+        ]
+      }
+    ]
+  },
+  {
+    "module": "lanAdv",
+    "endpoints": [
+      {
+        "path": "/admin/network?form=lan_ipv4",
+        "admin_module": "network",
+        "form": "lan_ipv4",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read and set the router LAN IPv4 address and subnet mask (advanced LAN settings).",
+        "read_safe": false,
+        "notable_fields": [
+          "macaddr",
+          "ipaddr",
+          "mask_type",
+          "custom_value",
+          "lan_type"
+        ]
+      },
+      {
+        "path": "/admin/network?form=status_ipv4",
+        "admin_module": "network",
+        "form": "status_ipv4",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read current WAN/LAN IPv4 status (address, netmask, gateway, DNS, conn type) used to validate LAN IP conflicts.",
+        "read_safe": true,
+        "notable_fields": [
+          "wan_ipv4_ipaddr",
+          "wan_ipv4_netmask",
+          "wan_ipv4_gateway",
+          "wan_ipv4_conntype",
+          "wan_ipv4_snd_ipaddr",
+          "wan_ipv4_snd_netmask",
+          "lan_ipv4_ipaddr",
+          "lan_ipv4_dhcp_enable"
+        ]
+      },
+      {
+        "path": "/admin/network?form=lan_agg",
+        "admin_module": "network",
+        "form": "lan_agg",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read and configure LAN link aggregation (enable, LACP/static mode, hash mode, per-port membership).",
+        "read_safe": false,
+        "notable_fields": [
+          "enable_agg",
+          "lacpmode",
+          "hashmode",
+          "port_settings",
+          "ports"
+        ]
+      },
+      {
+        "path": "/admin/system?form=reboot",
+        "admin_module": "system",
+        "form": "reboot",
+        "operations": [
+          "write"
+        ],
+        "purpose": "Reboot the router (triggered when LAN IP or link-agg changes require a restart); response returns reboot_time.",
+        "read_safe": false,
+        "notable_fields": [
+          "operation",
+          "reboot_time"
+        ]
+      }
+    ]
+  },
+  {
+    "module": "led",
+    "endpoints": [
+      {
+        "path": "/admin/ledgeneral?form=setting",
+        "admin_module": "ledgeneral",
+        "form": "setting",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read or toggle the router status LED on/off (general LED control switch)",
+        "read_safe": false,
+        "notable_fields": [
+          "enable"
+        ]
+      },
+      {
+        "path": "/admin/ledpm?form=setting",
+        "admin_module": "ledpm",
+        "form": "setting",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read or configure LED Night Mode (scheduled window during which the LED is dimmed/off)",
+        "read_safe": false,
+        "notable_fields": [
+          "enable",
+          "time_start",
+          "time_end",
+          "ledpm_support"
+        ]
+      }
+    ]
+  },
+  {
+    "module": "mapClients",
+    "endpoints": [
+      {
+        "path": "/admin/smart_network?form=game_accelerator",
+        "admin_module": "smart_network",
+        "form": "game_accelerator",
+        "operations": [
+          "loadDevice",
+          "loadSpeed"
+        ],
+        "purpose": "Read the connected-clients list (device info or live speed) driving the network map",
+        "read_safe": true,
+        "notable_fields": [
+          "operation",
+          "clientList",
+          "clientNum",
+          "onlineClientNum",
+          "mac",
+          "ip",
+          "deviceTag",
+          "networkMode",
+          "downloadSpeed",
+          "uploadSpeed",
+          "speedLimitOnline"
+        ]
+      },
+      {
+        "path": "/admin/smart_network?form=device_priority",
+        "admin_module": "smart_network",
+        "form": "device_priority",
+        "operations": [
+          "block"
+        ],
+        "purpose": "blockClientProxy - block/deprioritize a device via device-priority (writes state)",
+        "read_safe": false,
+        "notable_fields": [
+          "operation",
+          "mac"
+        ]
+      },
+      {
+        "path": "/admin/status?form=client_status",
+        "admin_module": "status",
+        "form": "client_status",
+        "operations": [
+          "load"
+        ],
+        "purpose": "clientStatusProxy - load per-client status snapshot",
+        "read_safe": true,
+        "notable_fields": [
+          "operation"
+        ]
+      },
+      {
+        "path": "/admin/traffic?form=dev_name",
+        "admin_module": "traffic",
+        "form": "dev_name",
+        "operations": [
+          "write"
+        ],
+        "purpose": "changeDeviceNameProxy - rename a device (set its alias/name)",
+        "read_safe": false,
+        "notable_fields": [
+          "operation",
+          "mac",
+          "alias"
+        ]
+      },
+      {
+        "path": "/admin/smart_network?form=client_speed_limit",
+        "admin_module": "smart_network",
+        "form": "client_speed_limit",
+        "operations": [
+          "read_max",
+          "write"
+        ],
+        "purpose": "getSpeedLimitMaxProxy/speedLimitModel - read max allowed speed and set per-client download/upload bandwidth limits",
+        "read_safe": false,
+        "notable_fields": [
+          "operation",
+          "mac",
+          "enableLimit",
+          "downloadLimit",
+          "uploadLimit",
+          "downloadLimitType",
+          "uploadLimitType",
+          "downloadLimitUnit",
+          "uploadLimitUnit"
+        ]
+      },
+      {
+        "path": "/admin/access_control?form=black_devices",
+        "admin_module": "access_control",
+        "form": "black_devices",
+        "operations": [
+          "load",
+          "block"
+        ],
+        "purpose": "onlineDeviceStore/blockDevice - load blacklist of blocked devices and add (block) a device to the access-control blacklist",
+        "read_safe": false,
+        "notable_fields": [
+          "operation",
+          "data",
+          "index",
+          "key",
+          "mac",
+          "ipaddr",
+          "deviceType",
+          "name"
+        ]
+      }
+    ]
+  },
+  {
+    "module": "mapInternet",
+    "endpoints": [
+      {
+        "path": "/admin/network?form=lan_ipv4",
+        "admin_module": "network",
+        "form": "lan_ipv4",
+        "operations": [
+          "load",
+          "read"
+        ],
+        "purpose": "Reads the LAN IPv4 network-map info (used in AP/bridge mode to show the router's LAN address and mask)",
+        "read_safe": true,
+        "notable_fields": [
+          "macaddr",
+          "lan_type",
+          "ipaddr",
+          "mask_type",
+          "custom_value"
+        ]
+      },
+      {
+        "path": "/admin/status?form=speedtest",
+        "admin_module": "status",
+        "form": "speedtest",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Reads speed-test availability/status for the internet network-map panel (getSpeedTestStatusProxy.getStatus)",
+        "read_safe": true,
+        "notable_fields": [
+          "is_available"
+        ]
+      }
+    ]
+  },
+  {
+    "module": "mapMesh",
+    "endpoints": []
+  },
+  {
+    "module": "mapRouter",
+    "endpoints": [
+      {
+        "path": "/admin/cloud_account?form=get_deviceInfo",
+        "admin_module": "cloud_account",
+        "form": "get_deviceInfo",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read and edit the router's display/device name shown in the network map.",
+        "read_safe": false,
+        "notable_fields": [
+          "model"
+        ]
+      },
+      {
+        "path": "/admin/status?form=router",
+        "admin_module": "status",
+        "form": "router",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read router status: CPU/memory usage, storage, ethernet ports, and per-band wireless status/encryption.",
+        "read_safe": true,
+        "notable_fields": [
+          "cpuUsage",
+          "memUsage",
+          "storageAvailable",
+          "storageCapacity",
+          "name",
+          "status",
+          "speed",
+          "duplex",
+          "is_wan",
+          "wireless2gEnable",
+          "wireless2gEncryption"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=wireless_2g",
+        "admin_module": "wireless",
+        "form": "wireless_2g",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read/toggle the 2.4GHz main wireless radio on or off.",
+        "read_safe": false,
+        "notable_fields": [
+          "enable",
+          "disabled_all"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=wireless_5g",
+        "admin_module": "wireless",
+        "form": "wireless_5g",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read/toggle the 5GHz (or 5GHz-1) main wireless radio on or off.",
+        "read_safe": false,
+        "notable_fields": [
+          "enable",
+          "disabled_all"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=wireless_5g_2",
+        "admin_module": "wireless",
+        "form": "wireless_5g_2",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read/toggle the second 5GHz main wireless radio (tri-band) on or off.",
+        "read_safe": false,
+        "notable_fields": [
+          "enable",
+          "disabled_all"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=wireless_6g",
+        "admin_module": "wireless",
+        "form": "wireless_6g",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read/toggle the 6GHz (WiFi 6E) main wireless radio on or off.",
+        "read_safe": false,
+        "notable_fields": [
+          "enable",
+          "disabled_all"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=guest_2g",
+        "admin_module": "wireless",
+        "form": "guest_2g",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read/toggle the 2.4GHz guest network on or off.",
+        "read_safe": false,
+        "notable_fields": [
+          "enable"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=guest_5g",
+        "admin_module": "wireless",
+        "form": "guest_5g",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read/toggle the 5GHz (or 5GHz-1) guest network on or off.",
+        "read_safe": false,
+        "notable_fields": [
+          "enable"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=guest_5g_2",
+        "admin_module": "wireless",
+        "form": "guest_5g_2",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read/toggle the second 5GHz guest network (tri-band) on or off.",
+        "read_safe": false,
+        "notable_fields": [
+          "enable"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=guest_6g",
+        "admin_module": "wireless",
+        "form": "guest_6g",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read/toggle the 6GHz (WiFi 6E) guest network on or off.",
+        "read_safe": false,
+        "notable_fields": [
+          "enable"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=iot_2g&form=iot_5g&form=iot_5g_2",
+        "admin_module": "wireless",
+        "form": "iot_2g (combined with iot_5g and, on tri-band, iot_5g_2)",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read/toggle the per-band IoT networks and their encryption/PSK keys (URL assembled dynamically; 5g_2 appended only on tri-band).",
+        "read_safe": false,
+        "notable_fields": [
+          "iot2gEnable",
+          "iot5gEnable",
+          "iot5g2Enable",
+          "iot2gEncryption",
+          "iot5gEncryption",
+          "iot5g2Encryption",
+          "iot2gPskKey",
+          "iot5gPskKey",
+          "iot5g2PskKey"
+        ]
+      }
+    ]
+  },
+  {
+    "module": "networkStatus",
+    "endpoints": [
+      {
+        "path": "/admin/status?form=all",
+        "admin_module": "status",
+        "form": "all",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read full WAN/modem connection status (IPv4 config, DNS, uptime, LTE modem signal) for the network status page.",
+        "read_safe": true,
+        "notable_fields": [
+          "conn_type",
+          "wan_ipv4_conntype",
+          "wan_ipv4_ipaddr",
+          "wan_ipv4_netmask",
+          "wan_ipv4_gateway",
+          "wan_ipv4_pridns",
+          "wan_ipv4_snddns",
+          "wan_ipv4_uptime",
+          "modem_connstatus",
+          "modem_status",
+          "modem_ipaddr",
+          "modem_signal",
+          "modem_ipv4_uptime"
+        ]
+      },
+      {
+        "path": "/admin/status?form=internet",
+        "admin_module": "status",
+        "form": "internet",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read internet reachability status (connected / disconnected / connecting / unplugged / poor connection) for the status indicator.",
+        "read_safe": true,
+        "notable_fields": [
+          "internet_status"
+        ]
+      }
+    ]
+  },
+  {
+    "module": "operationMode",
+    "endpoints": [
+      {
+        "path": "/admin/system?form=sysmode",
+        "admin_module": "system",
+        "form": "sysmode",
+        "operations": [
+          "read",
+          "load",
+          "write"
+        ],
+        "purpose": "Read the current router operation mode and its supported modes, and switch the operation mode (router/ap/repeater/client/multissid), which reboots the device.",
+        "read_safe": false,
+        "notable_fields": [
+          "support",
+          "mode"
+        ]
+      }
+    ]
+  },
+  {
+    "module": "portForwarding",
+    "endpoints": [
+      {
+        "path": "/admin/nat?form=vs",
+        "admin_module": "nat",
+        "form": "vs",
+        "operations": [
+          "read",
+          "write",
+          "add",
+          "remove"
+        ],
+        "purpose": "Manage NAT virtual-server / port-forwarding rules (list, create, edit, enable toggle, delete).",
+        "read_safe": false,
+        "notable_fields": [
+          "name",
+          "ipaddr",
+          "external_port",
+          "internal_port",
+          "protocol",
+          "enable",
+          "externalPortType",
+          "externalPortSingle",
+          "externalPortRangeStart",
+          "externalPortRangeEnd"
+        ]
+      },
+      {
+        "path": "/admin/nat?form=client_list",
+        "admin_module": "nat",
+        "form": "client_list",
+        "operations": [
+          "read"
+        ],
+        "purpose": "List LAN-connected devices to pick an IP address when adding a port-forwarding rule.",
+        "read_safe": true,
+        "notable_fields": [
+          "client_type",
+          "name",
+          "ip",
+          "mac"
+        ]
+      }
+    ]
+  },
+  {
+    "module": "reboot",
+    "endpoints": [
+      {
+        "path": "/admin/reboot?form=set",
+        "admin_module": "reboot",
+        "form": "set",
+        "operations": [
+          "set",
+          "read"
+        ],
+        "purpose": "Read/write the scheduled auto-reboot configuration (enable, repeat cycle, time, day)",
+        "read_safe": false,
+        "notable_fields": [
+          "enable",
+          "cycle",
+          "time",
+          "day"
+        ]
+      },
+      {
+        "path": "/admin/system?form=reboot",
+        "admin_module": "system",
+        "form": "reboot",
+        "operations": [
+          "reboot"
+        ],
+        "purpose": "Immediately reboot the router device",
+        "read_safe": false,
+        "notable_fields": [
+          "operation",
+          "login_remote",
+          "remote_url",
+          "loginRemote",
+          "remoteUrl"
+        ]
+      }
+    ]
+  },
+  {
+    "module": "sysLog",
+    "endpoints": [
+      {
+        "path": "/admin/syslog?form=log",
+        "admin_module": "syslog",
+        "form": "log",
+        "operations": [
+          "load",
+          "remove",
+          "mail"
+        ],
+        "purpose": "Read the system log entries; clear the log; and trigger sending the log by email.",
+        "read_safe": false,
+        "notable_fields": [
+          "time",
+          "level",
+          "type",
+          "content",
+          "send",
+          "operation"
+        ]
+      },
+      {
+        "path": "/admin/syslog?form=types",
+        "admin_module": "syslog",
+        "form": "types",
+        "operations": [
+          "load"
+        ],
+        "purpose": "Load the list of available log type categories used to filter the log.",
+        "read_safe": true,
+        "notable_fields": [
+          "name",
+          "value"
+        ]
+      },
+      {
+        "path": "/admin/syslog?form=filter",
+        "admin_module": "syslog",
+        "form": "filter",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read and set the current log display filter (by type and level).",
+        "read_safe": false,
+        "notable_fields": [
+          "type",
+          "level",
+          "operation"
+        ]
+      },
+      {
+        "path": "/admin/syslog?form=mail",
+        "admin_module": "syslog",
+        "form": "mail",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read and configure the log-by-email settings (SMTP server, credentials, auto-mail schedule).",
+        "read_safe": false,
+        "notable_fields": [
+          "from",
+          "to",
+          "auth",
+          "user",
+          "password",
+          "smtp_server",
+          "auto_mail",
+          "auto_mail_type",
+          "every_day_time",
+          "every_hours",
+          "mail_again"
+        ]
+      },
+      {
+        "path": "/admin/syslog?form=save_log",
+        "admin_module": "syslog",
+        "form": "save_log",
+        "operations": [
+          "save"
+        ],
+        "purpose": "Save/download the system log to a local file (file upload/export operation).",
+        "read_safe": false,
+        "notable_fields": [
+          "operation"
+        ]
+      }
+    ]
+  },
+  {
+    "module": "timeSettings",
+    "endpoints": [
+      {
+        "path": "/admin/time?form=settings",
+        "admin_module": "time",
+        "form": "settings",
+        "operations": [
+          "read",
+          "write",
+          "gmt",
+          "refresh"
+        ],
+        "purpose": "Read and write router system time settings (NTP servers, timezone, manual date/time, mode); gmt/refresh acquire time from an NTP/GMT server.",
+        "read_safe": false,
+        "notable_fields": [
+          "type",
+          "date",
+          "time",
+          "timezone",
+          "ntp_svr1",
+          "ntp_svr2",
+          "time_format",
+          "hour24_enable",
+          "hour24_support",
+          "day",
+          "operation"
+        ]
+      },
+      {
+        "path": "/admin/time?form=dst",
+        "admin_module": "time",
+        "form": "dst",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read and configure Daylight Saving Time rules (enable, start/end month/week/day/hour) and view DST status.",
+        "read_safe": false,
+        "notable_fields": [
+          "dst_enable",
+          "start_month",
+          "start_week",
+          "start_day",
+          "start_hour",
+          "end_month",
+          "end_week",
+          "end_day",
+          "end_hour",
+          "dst_status"
+        ]
+      },
+      {
+        "path": "/admin/time?form=hour24",
+        "admin_module": "time",
+        "form": "hour24",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read/set whether the device supports and uses 24-hour time format.",
+        "read_safe": false,
+        "notable_fields": [
+          "hour24_support",
+          "hour24_enable"
+        ]
+      },
+      {
+        "path": "/admin/quick_setup?form=timezone",
+        "admin_module": "quick_setup",
+        "form": "timezone",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read the timezone list/selection used during quick setup (read-only proxy, writeFilter forces operation:read).",
+        "read_safe": true,
+        "notable_fields": [
+          "timezone"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=region",
+        "admin_module": "wireless",
+        "form": "region",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read and set the wireless region/country, including whether region selection is permitted and the available region list.",
+        "read_safe": false,
+        "notable_fields": [
+          "region_select_permission",
+          "region_list",
+          "country"
+        ]
+      }
+    ]
+  },
+  {
+    "module": "upnp",
+    "endpoints": [
+      {
+        "path": "/admin/nat?form=setting",
+        "admin_module": "nat",
+        "form": "setting",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read NAT enable state (used to gate UPnP availability since UPnP depends on NAT).",
+        "read_safe": true,
+        "notable_fields": [
+          "enable"
+        ]
+      },
+      {
+        "path": "/admin/upnp?form=enable",
+        "admin_module": "upnp",
+        "form": "enable",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read and toggle whether the UPnP service is enabled on the router.",
+        "read_safe": false,
+        "notable_fields": [
+          "enable"
+        ]
+      },
+      {
+        "path": "/admin/upnp?form=service",
+        "admin_module": "upnp",
+        "form": "service",
+        "operations": [
+          "read",
+          "load"
+        ],
+        "purpose": "List active UPnP port-mapping entries created by clients (name, IP, ports, protocol).",
+        "read_safe": true,
+        "notable_fields": [
+          "description",
+          "name",
+          "ipaddr",
+          "internal_port",
+          "external_port",
+          "protocol"
+        ]
+      }
+    ]
+  },
+  {
+    "module": "wirelessBasic",
+    "endpoints": []
+  },
+  {
+    "module": "wirelessRouter",
+    "endpoints": [
+      {
+        "path": "/admin/wireless?form=wireless_2g",
+        "admin_module": "wireless",
+        "form": "wireless_2g",
+        "operations": [
+          "read",
+          "read_spf",
+          "write_spf"
+        ],
+        "purpose": "Read and write 2.4GHz wireless radio settings (SSID, security, channel, txpower, MU-MIMO).",
+        "read_safe": false,
+        "notable_fields": [
+          "enable",
+          "ssid",
+          "hidden",
+          "encryption",
+          "psk_key",
+          "wpa_key",
+          "hwmode",
+          "htmode",
+          "channel",
+          "txpower",
+          "mu_mimo"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=wireless_5g",
+        "admin_module": "wireless",
+        "form": "wireless_5g",
+        "operations": [
+          "read",
+          "read_spf",
+          "write_spf"
+        ],
+        "purpose": "Read and write 5GHz (primary) wireless radio settings.",
+        "read_safe": false,
+        "notable_fields": [
+          "enable",
+          "ssid",
+          "hidden",
+          "encryption",
+          "psk_key",
+          "wpa_key",
+          "hwmode",
+          "htmode",
+          "channel",
+          "txpower",
+          "mu_mimo"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=wireless_5g_2",
+        "admin_module": "wireless",
+        "form": "wireless_5g_2",
+        "operations": [
+          "read",
+          "read_spf",
+          "write_spf"
+        ],
+        "purpose": "Read and write second 5GHz band radio settings (tri-band devices).",
+        "read_safe": false,
+        "notable_fields": [
+          "enable",
+          "ssid",
+          "hidden",
+          "encryption",
+          "psk_key",
+          "wpa_key",
+          "hwmode",
+          "htmode",
+          "channel",
+          "txpower",
+          "mu_mimo"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=wireless_6g",
+        "admin_module": "wireless",
+        "form": "wireless_6g",
+        "operations": [
+          "read",
+          "write_spf"
+        ],
+        "purpose": "Read and write 6GHz band radio settings (WiFi 6E devices).",
+        "read_safe": false,
+        "notable_fields": [
+          "enable",
+          "ssid",
+          "hidden",
+          "encryption",
+          "wep_key1",
+          "hwmode",
+          "htmode",
+          "channel",
+          "txpower",
+          "psc",
+          "mu_mimo"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=region",
+        "admin_module": "wireless",
+        "form": "region",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read the router's regulatory region/country and its wireless capability descriptor (also chained onto each band read).",
+        "read_safe": true,
+        "notable_fields": [
+          "country",
+          "capability"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=smart_connect",
+        "admin_module": "wireless",
+        "form": "smart_connect",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read/write Smart Connect (single unified SSID across bands) enable state.",
+        "read_safe": false,
+        "notable_fields": [
+          "smart_enable"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=ofdma",
+        "admin_module": "wireless",
+        "form": "ofdma",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read/write OFDMA feature enable state.",
+        "read_safe": false,
+        "notable_fields": [
+          "enable"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=twt",
+        "admin_module": "wireless",
+        "form": "twt",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read/write TWT (Target Wake Time) feature enable state.",
+        "read_safe": false,
+        "notable_fields": [
+          "enable"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=syspara_2g",
+        "admin_module": "wireless",
+        "form": "syspara_2g",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read 2.4GHz system parameters (radio enable state used to gate channel selection).",
+        "read_safe": true,
+        "notable_fields": [
+          "enable",
+          "ENABLE"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=syspara_5g",
+        "admin_module": "wireless",
+        "form": "syspara_5g",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read primary 5GHz system parameters (radio enable state).",
+        "read_safe": true,
+        "notable_fields": [
+          "enable",
+          "ENABLE"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=syspara_5g_2",
+        "admin_module": "wireless",
+        "form": "syspara_5g_2",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read second 5GHz band system parameters (radio enable state).",
+        "read_safe": true,
+        "notable_fields": [
+          "enable",
+          "ENABLE"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=syspara_6g",
+        "admin_module": "wireless",
+        "form": "syspara_6g",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read 6GHz band system parameters (radio enable state).",
+        "read_safe": true,
+        "notable_fields": [
+          "enable",
+          "ENABLE"
+        ]
+      },
+      {
+        "path": "/admin/ffs?form=config",
+        "admin_module": "ffs",
+        "form": "config",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read/write Amazon FFS (Frustration-Free Setup) enable configuration.",
+        "read_safe": false,
+        "notable_fields": [
+          "enable"
+        ]
+      }
+    ]
+  },
+  {
+    "module": "wirelessSchedule",
+    "endpoints": [
+      {
+        "path": "/admin/wireless?form=wireless_schedule",
+        "admin_module": "wireless",
+        "form": "wireless_schedule",
+        "operations": [
+          "read",
+          "load",
+          "write"
+        ],
+        "purpose": "Read and configure the wireless off schedule (enable flag, per-slot off-time windows with repeat, and next wireless on/off time).",
+        "read_safe": false,
+        "notable_fields": [
+          "enable",
+          "next_time",
+          "list",
+          "time_from",
+          "time_to",
+          "repeat"
+        ]
+      }
+    ]
+  },
+  {
+    "module": "wirelessSettingsAdv",
+    "endpoints": []
+  },
+  {
+    "module": "wol",
+    "endpoints": [
+      {
+        "path": "/admin/wol?form=device",
+        "admin_module": "wol",
+        "form": "device",
+        "operations": [
+          "load",
+          "add",
+          "remove",
+          "set",
+          "wakeup"
+        ],
+        "purpose": "Manage the saved Wake-on-LAN device list (list/add/edit/delete entries) and send a magic packet to wake a device.",
+        "read_safe": false,
+        "notable_fields": [
+          "name",
+          "mac",
+          "key",
+          "operation",
+          "data"
+        ]
+      },
+      {
+        "path": "/admin/access_control?form=black_devices",
+        "admin_module": "access_control",
+        "form": "black_devices",
+        "operations": [
+          "load"
+        ],
+        "purpose": "Load the list of currently connected/known devices so the user can pick one to add to the WOL list.",
+        "read_safe": true,
+        "notable_fields": [
+          "name",
+          "mac",
+          "deviceType"
+        ]
+      }
+    ]
+  },
+  {
+    "module": "wps",
+    "endpoints": [
+      {
+        "path": "/admin/wireless?form=syspara_wps",
+        "admin_module": "wireless",
+        "form": "syspara_wps",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read and toggle the WPS feature on/off (global WPS enable) with an activation wait_time.",
+        "read_safe": false,
+        "notable_fields": [
+          "wps",
+          "wait_time"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=wps_pin",
+        "admin_module": "wireless",
+        "form": "wps_pin",
+        "operations": [
+          "read",
+          "write"
+        ],
+        "purpose": "Read/manage the router's WPS PIN: read PIN and per-band lock state, toggle router-PIN enable (wps_label), and write to generate a new PIN or restore the default PIN.",
+        "read_safe": false,
+        "notable_fields": [
+          "wps_pin",
+          "wps_label",
+          "result",
+          "mac",
+          "lock_2g",
+          "lock_5g",
+          "lock_5g_2",
+          "option"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=wps_connect",
+        "admin_module": "wireless",
+        "form": "wps_connect",
+        "operations": [
+          "read",
+          "connect",
+          "pbc",
+          "pin",
+          "cancel"
+        ],
+        "purpose": "Drive the WPS connection handshake: read status/timeout, start PBC or PIN connect, poll pbc/pin status, and cancel an in-progress WPS session.",
+        "read_safe": false,
+        "notable_fields": [
+          "wps_timeout",
+          "disabled",
+          "available",
+          "wps_pin",
+          "wps_status",
+          "mac",
+          "option"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=wireless_2g",
+        "admin_module": "wireless",
+        "form": "wireless_2g",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read 2.4GHz wireless settings to determine whether WPS is usable (SSID enabled, hidden, encryption/cipher).",
+        "read_safe": true,
+        "notable_fields": [
+          "enable",
+          "hidden",
+          "encryption",
+          "psk_cipher",
+          "disabled",
+          "disabled_all",
+          "extinfo.wds_guest_compatible"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=wireless_5g",
+        "admin_module": "wireless",
+        "form": "wireless_5g",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read 5GHz wireless settings to determine whether WPS is usable (SSID enabled, hidden, encryption/cipher).",
+        "read_safe": true,
+        "notable_fields": [
+          "enable",
+          "hidden",
+          "encryption",
+          "psk_cipher",
+          "disabled",
+          "disabled_all",
+          "extinfo.wds_guest_compatible"
+        ]
+      },
+      {
+        "path": "/admin/wireless?form=wireless_5g_2",
+        "admin_module": "wireless",
+        "form": "wireless_5g_2",
+        "operations": [
+          "read"
+        ],
+        "purpose": "Read the second 5GHz band settings (tri-band routers) to determine whether WPS is usable.",
+        "read_safe": true,
+        "notable_fields": [
+          "enable",
+          "hidden",
+          "encryption",
+          "psk_cipher",
+          "disabled",
+          "disabled_all",
+          "extinfo.wds_guest_compatible"
+        ]
+      }
+    ]
+  }
+]
