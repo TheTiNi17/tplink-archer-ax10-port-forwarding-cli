@@ -21,53 +21,62 @@ else:
         sys.path.insert(0, candidate)
 
 import json
+from pathlib import Path
 import urllib3
 from tplinkcli.client import TplinkClient
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
-def load_env(path):
-    if os.path.exists(path):
-        with open(path) as f:
-            for line in f:
-                line = line.strip()
-                if line and not line.startswith("#") and "=" in line:
-                    key, value = line.split("=", 1)
-                    os.environ[key.strip()] = value.strip()
-        return True
-    return False
+# --- Config -----------------------------------------------------------------
+
+def load_env():
+    """Load .env from script dir, then ~/.config/tplink/.env. Returns path or None."""
+    candidates = [
+        Path(APP_DIR) / ".env",
+        Path.home() / ".config" / "tplink" / ".env",
+    ]
+    for path in candidates:
+        if path.is_file():
+            with open(path) as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#") and "=" in line:
+                        key, value = line.split("=", 1)
+                        os.environ[key.strip()] = value.strip()
+            return str(path)
+    return None
 
 
-env_path = os.path.join(APP_DIR, ".env")
-if not load_env(env_path):
-    print(f"Error: .env file not found at {env_path}")
-    print("Place .env next to the executable.")
-    sys.exit(1)
+# --- Helpers ----------------------------------------------------------------
 
-host = os.getenv("ROUTER_IP", "192.168.0.1")
-username = os.getenv("ROUTER_USERNAME", "admin")
-password = os.getenv("ROUTER_PASSWORD")
-
-if not password:
-    print("Error: ROUTER_PASSWORD is not set in .env")
-    sys.exit(1)
-
-client = TplinkClient(host, password, username=username)
-try:
-    client.login()
-except Exception as e:
-    print(f"Router login failed: {e}")
-    sys.exit(1)
+def matches_prefix(name, prefix):
+    """Case-insensitive prefix match. Empty prefix matches everything."""
+    return not prefix or name.lower().startswith(prefix.lower())
 
 
-# --- Port forwarding rules -------------------------------------------------
+def print_table(headers, rows):
+    """Aligned table with dynamic column widths. rows: list of tuples."""
+    if not rows:
+        return
+    widths = [len(h) for h in headers]
+    for row in rows:
+        for i, cell in enumerate(row):
+            widths[i] = max(widths[i], len(str(cell)))
+    fmt = "  ".join(f"{{:<{w}}}" for w in widths)
+    print(fmt.format(*headers))
+    print("  ".join("-" * w for w in widths))
+    for row in rows:
+        print(fmt.format(*[str(c) for c in row]))
 
-def get_rules():
+
+# --- Port forwarding rules --------------------------------------------------
+
+def get_rules(client):
     return client.request("nat?form=vs", operation="load")
 
 
-def set_rule_enable(rule, enable_state):
+def set_rule_enable(client, rule, enable_state):
     old_json = json.dumps(rule)
     new_rule = rule.copy()
     new_rule["enable"] = enable_state
@@ -76,37 +85,42 @@ def set_rule_enable(rule, enable_state):
     client.request("nat?form=vs", operation="update", params=params)
 
 
-def cmd_portrules(sub, prefix=""):
-    """sub = status|on|off|toggle, prefix = filter by name start."""
+def cmd_portrules(client, sub, prefix=""):
     try:
-        rules = get_rules()
+        rules = get_rules(client)
     except Exception as e:
-        print(f"Failed to read rules: {e}")
-        sys.exit(1)
+        print(f"Failed to read rules: {e}", file=sys.stderr)
+        return 1
 
     if sub == "status":
-        print(f"{'Name':<25} {'External':<15} {'Internal':<15} "
-              f"{'Protocol':<10} {'State':<6} {'IP':<15}")
-        print("-" * 95)
-        found = False
+        rows = []
         for rule in rules:
-            if prefix and not rule["name"].startswith(prefix):
+            if not matches_prefix(rule["name"], prefix):
                 continue
-            found = True
-            print(f"{rule['name']:<25} {rule['external_port']:<15} "
-                  f"{rule['internal_port']:<15} {rule['protocol']:<10} "
-                  f"{rule['enable']:<6} {rule['ipaddr']:<15}")
-        if not found:
+            rows.append((
+                rule["name"],
+                rule["external_port"],
+                rule["internal_port"],
+                rule["protocol"],
+                rule["enable"],
+                rule["ipaddr"],
+            ))
+        if not rows:
             print("No matching rules found.")
-        return
+            return 0
+        print_table(
+            ["Name", "External", "Internal", "Protocol", "State", "IP"],
+            rows,
+        )
+        return 0
 
     if sub not in ("on", "off", "toggle"):
-        print("Invalid action. Use status, on, off or toggle.")
-        sys.exit(1)
+        print("Invalid action. Use status, on, off or toggle.", file=sys.stderr)
+        return 1
 
     changed = 0
     for rule in rules:
-        if prefix and not rule["name"].startswith(prefix):
+        if not matches_prefix(rule["name"], prefix):
             continue
 
         if sub == "on":
@@ -120,32 +134,33 @@ def cmd_portrules(sub, prefix=""):
             continue
 
         try:
-            set_rule_enable(rule, target)
+            set_rule_enable(client, rule, target)
             print(f"Rule '{rule['name']}' -> {target}")
             changed += 1
         except Exception as e:
-            print(f"Failed to update '{rule['name']}': {e}")
+            print(f"Failed to update '{rule['name']}': {e}", file=sys.stderr)
 
     if changed == 0:
         print("No rules to change.")
     else:
         print(f"Rules changed: {changed}")
+    return 0
 
 
-# --- UPnP ------------------------------------------------------------------
+# --- UPnP -------------------------------------------------------------------
 
-def get_upnp_state():
+def get_upnp_state(client):
     result = client.request("upnp?form=enable", operation="read")
     if isinstance(result, dict):
         return result.get("enable", "?")
     return str(result)
 
 
-def set_upnp_state(state):
+def set_upnp_state(client, state):
     client.request("upnp?form=enable", operation="write", params={"enable": state})
 
 
-def list_upnp_mappings():
+def list_upnp_mappings(client):
     try:
         result = client.request("upnp?form=service", operation="load")
     except Exception:
@@ -161,105 +176,137 @@ def list_upnp_mappings():
     return []
 
 
-def cmd_upnp(sub):
+def cmd_upnp(client, sub):
     try:
-        current = get_upnp_state()
+        current = get_upnp_state(client)
     except Exception as e:
-        print(f"Failed to read UPnP state: {e}")
-        sys.exit(1)
+        print(f"Failed to read UPnP state: {e}", file=sys.stderr)
+        return 1
 
     if sub in ("list", "show"):
         try:
-            mappings = list_upnp_mappings()
+            mappings = list_upnp_mappings(client)
         except Exception as e:
-            print(f"Failed to read UPnP mappings: {e}")
-            sys.exit(1)
+            print(f"Failed to read UPnP mappings: {e}", file=sys.stderr)
+            return 1
 
         if not mappings:
             print("No active UPnP mappings.")
-            return
+            return 0
 
-        print(f"{'Description':<25} {'Name':<20} {'IP':<15} "
-              f"{'External':<15} {'Internal':<15} {'Protocol':<10}")
-        print("-" * 100)
+        rows = []
         for m in mappings:
-            desc = str(m.get("description", m.get("desc", "")))[:24]
-            name = str(m.get("name", ""))[:19]
-            ip = str(m.get("ipaddr", ""))[:14]
-            ext = str(m.get("external_port", ""))[:14]
-            intr = str(m.get("internal_port", ""))[:14]
-            proto = str(m.get("protocol", ""))[:9]
-            print(f"{desc:<25} {name:<20} {ip:<15} {ext:<15} {intr:<15} {proto:<10}")
-        return
+            rows.append((
+                str(m.get("description", m.get("desc", ""))),
+                str(m.get("name", "")),
+                str(m.get("ipaddr", "")),
+                str(m.get("external_port", "")),
+                str(m.get("internal_port", "")),
+                str(m.get("protocol", "")),
+            ))
+        print_table(
+            ["Description", "Name", "IP", "External", "Internal", "Protocol"],
+            rows,
+        )
+        return 0
 
     if sub == "status":
         print(f"UPnP: {current}")
-        return
+        return 0
 
     if sub == "toggle":
         target = "off" if current == "on" else "on"
     elif sub in ("on", "off"):
         target = sub
     else:
-        print("Usage: pf-tool upnp {on|off|status|toggle|list}")
-        sys.exit(1)
+        print("Usage: pf-tool upnp {on|off|status|toggle|list}", file=sys.stderr)
+        return 1
 
     if current == target:
         print(f"UPnP already {target}")
-        return
+        return 0
 
     try:
-        set_upnp_state(target)
+        set_upnp_state(client, target)
         print(f"UPnP -> {target}")
+        return 0
     except Exception as e:
-        print(f"Failed to change UPnP state: {e}")
-        sys.exit(1)
+        print(f"Failed to change UPnP state: {e}", file=sys.stderr)
+        return 1
 
 
-# --- Usage -----------------------------------------------------------------
+# --- Usage ------------------------------------------------------------------
 
 def print_usage():
+    prog = os.path.basename(sys.argv[0]) or "pf-tool"
     print("Usage:")
-    print("  pf-tool portrules {status|on|off|toggle} [prefix]  # port forwarding rules")
-    print("  pf-tool upnp      {on|off|status|toggle|list}     # UPnP service")
+    print(f"  {prog} portrules {{status|on|off|toggle}} [prefix]  # port forwarding rules")
+    print(f"  {prog} upnp      {{on|off|status|toggle|list}}     # UPnP service")
     print()
     print("Examples:")
-    print("  pf-tool portrules status            # all rules")
-    print("  pf-tool portrules status GTA        # rules with prefix GTA")
-    print("  pf-tool portrules on GTA            # enable all GTA rules")
-    print("  pf-tool portrules off GTA           # disable all GTA rules")
-    print("  pf-tool portrules toggle GTA        # invert state of GTA rules")
-    print("  pf-tool upnp on                     # enable UPnP")
-    print("  pf-tool upnp off                    # disable UPnP")
-    print("  pf-tool upnp status                 # current UPnP state")
-    print("  pf-tool upnp toggle                 # invert UPnP state")
-    print("  pf-tool upnp list                   # active UPnP mappings")
+    print(f"  {prog} portrules status            # all rules")
+    print(f"  {prog} portrules status GTA        # rules with prefix GTA (case-insensitive)")
+    print(f"  {prog} portrules on GTA            # enable all GTA rules")
+    print(f"  {prog} portrules off GTA           # disable all GTA rules")
+    print(f"  {prog} portrules toggle GTA        # invert state of GTA rules")
+    print(f"  {prog} upnp on                     # enable UPnP")
+    print(f"  {prog} upnp off                    # disable UPnP")
+    print(f"  {prog} upnp status                 # current UPnP state")
+    print(f"  {prog} upnp toggle                 # invert UPnP state")
+    print(f"  {prog} upnp list                   # active UPnP mappings")
 
 
-# --- main ------------------------------------------------------------------
+# --- main -------------------------------------------------------------------
 
 def main():
     if len(sys.argv) < 2:
         print_usage()
-        sys.exit(1)
+        return 1
 
-    action = sys.argv[1].lower()
+    env_path = load_env()
+    if env_path is None:
+        print("Error: .env not found.", file=sys.stderr)
+        print("Place .env next to the script, or at ~/.config/tplink/.env", file=sys.stderr)
+        return 1
 
-    if action == "portrules":
-        sub = sys.argv[2].lower() if len(sys.argv) > 2 else "status"
-        prefix = sys.argv[3] if len(sys.argv) > 3 else ""
-        cmd_portrules(sub, prefix)
-        return
+    host = os.getenv("ROUTER_IP", "192.168.0.1")
+    username = os.getenv("ROUTER_USERNAME", "admin")
+    password = os.getenv("ROUTER_PASSWORD")
+    secure_hash = os.getenv("ROUTER_SECURE_HASH", "").lower() in {"1", "true", "yes"}
 
-    if action == "upnp":
-        sub = sys.argv[2].lower() if len(sys.argv) > 2 else "status"
-        cmd_upnp(sub)
-        return
+    if not password:
+        print("Error: ROUTER_PASSWORD is not set in .env", file=sys.stderr)
+        return 1
 
-    print(f"Unknown command: {action}")
-    print_usage()
-    sys.exit(1)
+    client = TplinkClient(host, password, username=username, secure_hash=secure_hash)
+    try:
+        try:
+            client.login()
+        except Exception as e:
+            print(f"Router login failed: {e}", file=sys.stderr)
+            return 1
+
+        action = sys.argv[1].lower()
+
+        if action == "portrules":
+            sub = sys.argv[2].lower() if len(sys.argv) > 2 else "status"
+            prefix = sys.argv[3] if len(sys.argv) > 3 else ""
+            return cmd_portrules(client, sub, prefix)
+
+        if action == "upnp":
+            sub = sys.argv[2].lower() if len(sys.argv) > 2 else "status"
+            return cmd_upnp(client, sub)
+
+        print(f"Unknown command: {action}", file=sys.stderr)
+        print_usage()
+        return 1
+    finally:
+        try:
+            client.logout()
+        except Exception:
+            pass
+        client.close()
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
